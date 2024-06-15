@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=New+Tegomin&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+}
+main{
+    background: url(../background3.jpg) no-repeat;
+    min-height: 100vh;
+    background-size: 100vw 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+#game-board{
+    background: linear-gradient(green , yellow);
+    width: 90vmin;
+    height: 92vmin;
+    border: 2px solid black;
+    display: grid;
+    grid-template-columns: repeat(18,1fr);
+    grid-template-rows: repeat(18,1fr);
+}
+#scoreBox{
+    position: absolute;
+    top: 9px;
+    right: 200px;
+    font-size: 39px;
+    font-weight: bold;
+    font-family: 'New Tegomin', serif;
+    color: aqua;
+    background: mediumblue;
+    padding: 8px;
+}
+
+#highscoreBox{
+    position: absolute;
+    top: 75px;
+    right: 140px;
+    font-size: 39px;
+    font-weight: bold;
+    font-family: 'New Tegomin', serif;
+    color: aliceblue;
+    background: black;
+    margin: 10px;
+    padding: 8px;
+}

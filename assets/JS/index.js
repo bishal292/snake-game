@@ -20,6 +20,9 @@ let foodLocation = { x: 6, y: 7 };
 // Game rendering and fps Controll here
 function main(currentTime) {
   window.requestAnimationFrame(main);
+  if ((currentTime - lastRenderTime) / 1000 < 1 / speed) {
+    return;
+  }
   lastRenderTime = currentTime;
   gameEngine();
 }

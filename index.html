@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake-Game</title>
     <link rel="stylesheet" href="./assets/CSS/styles.css">
+    <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
+    <div id="speedController">
+        <label for="levelselector">Select level</label>
+        <select name="level" id="levelSelector" onchange="levelChanger()">
+            <option value="Easy" selected>Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+            <option value="Extreme">Extreme</option>
+        </select>
+    </div>
     <main>
         <div id="scoreBox">score : 0</div>
         <div id="highscoreBox">Highscore : 0</div>
@@ -15,4 +27,5 @@
     </main>
 </body>
 <script src="./assets/JS/index.js"></script>
+
 </html>

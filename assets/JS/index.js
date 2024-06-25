@@ -1,6 +1,8 @@
-websitelink =
-  "https://wallpapers.com/wallpapers/green-snake-game-character-bqvxt2p5oibadgqn.html";
+websitelink ="https://wallpapers.com/wallpapers/green-snake-game-character-bqvxt2p5oibadgqn.html";
 console.log(`Background Image is taken from site: ${websitelink}`);
+
+// Note: -> id from html is directly accessible as the variable in javascript
+// Game Initial variable
 
 let direction = { x: 0, y: 0 };
 const eatSound = new Audio("assets/musics/food.mp3");
@@ -8,14 +10,16 @@ const gameOverSound = new Audio("assets/musics/gameover.mp3");
 const moveSound = new Audio("assets/musics/move.mp3");
 const backgroundMusic = new Audio("assets/musics/music.mp3");
 let lastRenderTime = 0;
+let box = 20; // It is the no. of boxes in the grid
 let score = 0;
 let speed = 5;
 let snakeArr = [
   { x: 10, y: 10 },
   { x: 11, y: 10 },
 ];
-
 let foodLocation = { x: 6, y: 7 };
+let previousDirection;
+console.log(`speed of the snake is ${speed}`);
 
 // Game rendering and fps Controll here
 function main(currentTime) {
@@ -26,6 +30,30 @@ function main(currentTime) {
   lastRenderTime = currentTime;
   gameEngine();
 }
+
+// logic to change the initial spped according to the selected level
+function levelChanger(){
+const levelSelected = document.getElementById('levelSelector').value;
+switch(levelSelected) {
+  case "Medium":
+    speed = 10;
+    break;
+  case "Hard":
+    speed = 15;
+    break;
+  case "Extreme":
+    speed = 25;
+  default:
+    speed = 5;
+}
+}
+console.log(`speed of snake is: ${speed}`);
+
+// Increase snake movement speed after each 15 seconds
+setTimeout(() => {
+  speed ++;
+  console.log(`Speed of snake is increased to : ${speed}`);
+}, 15000);
 
 //  Functions to check whether the game is over or not
 function isGameOver(snake) {
@@ -38,7 +66,7 @@ function isGameOver(snake) {
     }
   }
   // If you bump into the wall
-  if (snake[0].x > 20 || snake[0].x < 0 || snake[0].y > 20 || snake[0].y < 0) {
+  if (snake[0].x > box || snake[0].x < 0 || snake[0].y > box || snake[0].y < 0) {
     return true;
   }
 
@@ -57,7 +85,6 @@ function gameEngine() {
       { x: 10, y: 10 },
       { x: 11, y: 10 },
     ];
-    backgroundMusic.play();
     score = 0;
     scoreBox.innerHTML = "score: " + score;
   }
@@ -65,6 +92,7 @@ function gameEngine() {
   if (snakeArr[0].y === foodLocation.y && snakeArr[0].x === foodLocation.x) {
     eatSound.play();
     score += 1;
+    // Updating HighScore
     if (score > hiscoreval) {
       hiscoreval = score;
       localStorage.setItem("gameHighScore", JSON.stringify(hiscoreval));
@@ -91,10 +119,10 @@ function gameEngine() {
 
   // Displaing Snake
   gameBoard.innerHTML = "";
-  snakeArr.forEach((e, index) => {
+  snakeArr.forEach((segment, index) => {
     snakeElement = document.createElement("div");
-    snakeElement.style.gridRowStart = e.y;
-    snakeElement.style.gridColumnStart = e.x;
+    snakeElement.style.gridRowStart = segment.y;
+    snakeElement.style.gridColumnStart = segment.x;
     if (index === 0) {
       snakeElement.id = "head";
     } else {
@@ -104,14 +132,13 @@ function gameEngine() {
   });
 
   // Displaying the foodLocation
-  foodLocationElement = document.createElement("div");
-  foodLocationElement.style.gridRowStart = foodLocation.y;
-  foodLocationElement.style.gridColumnStart = foodLocation.x;
-  foodLocationElement.id = "food";
-  gameBoard.appendChild(foodLocationElement);
+  const foodElement = document.createElement("div");
+  foodElement.style.gridRowStart = foodLocation.y;
+  foodElement.style.gridColumnStart = foodLocation.x;
+  foodElement.id = "food";
+  gameBoard.appendChild(foodElement);
 }
 
-backgroundMusic.play();
 let gameHighScore = localStorage.getItem("gameHighScore");
 if (gameHighScore === null) {
   hiscoreval = 0;
@@ -122,33 +149,32 @@ if (gameHighScore === null) {
 }
 
 window.addEventListener("keydown", (e) => {
-  direction = { x: 0, y: 1 }; // Start the game
   moveSound.play();
   switch (e.key) {
     case "ArrowUp":
-      console.log("ArrowUp");
-      direction.x = 0;
-      direction.y = -1;
+      if (previousDirection !== "DOWN") {
+        direction = { x: 0, y: -1 };
+        previousDirection = "UP";
+      }
       break;
-
     case "ArrowDown":
-      console.log("ArrowDown");
-      direction.x = 0;
-      direction.y = 1;
+      if (previousDirection !== "UP") {
+        direction = { x: 0, y: 1 };
+        previousDirection = "DOWN";
+      }
       break;
-
     case "ArrowLeft":
-      console.log("ArrowLeft");
-      direction.x = -1;
-      direction.y = 0;
+      if (previousDirection !== "RIGHT") {
+        direction = { x: -1, y: 0 };
+        previousDirection = "LEFT";
+      }
       break;
-
     case "ArrowRight":
-      console.log("ArrowRight");
-      direction.x = 1;
-      direction.y = 0;
+      if (previousDirection !== "LEFT") {
+        direction = { x: 1, y: 0 };
+        previousDirection = "RIGHT";
+      }
       break;
-
     default:
       break;
   }
